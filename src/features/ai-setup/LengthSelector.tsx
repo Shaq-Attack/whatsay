@@ -5,6 +5,7 @@ const OPTIONS: { value: Length; label: string; desc: string }[] = [
   { value: "short", label: "Short", desc: "1–2 sentences" },
   { value: "medium", label: "Medium", desc: "2–4 sentences" },
   { value: "long", label: "Long", desc: "4–7 sentences" },
+  { value: "auto", label: "Auto", desc: "As needed" },
 ];
 
 type Props = { value: Length; onChange: (v: Length) => void };

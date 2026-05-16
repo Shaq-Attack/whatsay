@@ -39,7 +39,7 @@ export type Intent =
 
 export type Style = "plain" | "mimic" | "casual" | "polished" | "concise" | "corporate";
 
-export type Length = "short" | "medium" | "long";
+export type Length = "short" | "medium" | "long" | "auto";
 
 export type AIConfig = {
   tone: Tone;
