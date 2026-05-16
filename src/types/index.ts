@@ -52,6 +52,8 @@ export type AIConfig = {
 export type Conversation = {
   id: string;
   title: string;
+  themName: string;
+  youName: string;
   messages: Message[];
   context: string;
   aiConfig: AIConfig;
@@ -72,6 +74,8 @@ export function createConversation(): Conversation {
   return {
     id: crypto.randomUUID(),
     title: "New Conversation",
+    themName: "",
+    youName: "",
     messages: [],
     context: "",
     aiConfig: { ...DEFAULT_AI_CONFIG },

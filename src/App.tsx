@@ -24,6 +24,8 @@ export default function App() {
       messages: conv.active.messages,
       context: conv.active.context,
       aiConfig: conv.active.aiConfig,
+      themName: conv.active.themName,
+      youName: conv.active.youName,
       onChunk: (chunk) => conv.appendChunk(genId, chunk),
       onComplete: () => conv.finishGenerating(genId),
       onError: () => conv.rejectGenerated(),
@@ -61,6 +63,8 @@ export default function App() {
           onEditMessage={conv.editMessage}
           onDeleteMessage={conv.deleteMessage}
           onContextChange={conv.setContext}
+          onThemNameChange={conv.setThemName}
+          onYouNameChange={conv.setYouName}
           onAIConfigChange={conv.setAIConfig}
           onRename={(title) => conv.renameConversation(conv.active!.id, title)}
           onGenerate={handleGenerate}

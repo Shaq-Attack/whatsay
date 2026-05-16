@@ -34,7 +34,7 @@ export async function* generateStream(params: {
   maxTokens?: number;
 }): AsyncGenerator<string> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 120_000);
+  const timeout = setTimeout(() => controller.abort(), 300_000); // 5 minutes
 
   const res = await fetch(`${BASE_URL}/api/chat`, {
     method: "POST",
@@ -44,6 +44,7 @@ export async function* generateStream(params: {
       model: params.model,
       messages: params.messages,
       stream: true,
+      keep_alive: "10m",
       options: {
         temperature: params.temperature ?? 0.7,
         num_predict: params.maxTokens ?? 500,

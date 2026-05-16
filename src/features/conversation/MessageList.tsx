@@ -6,6 +6,8 @@ import type { Message, GeneratedMessage } from "@/types";
 type Props = {
   messages: Message[];
   generated: GeneratedMessage[];
+  themName: string;
+  youName: string;
   onEditMessage: (id: string, text: string) => void;
   onDeleteMessage: (id: string) => void;
   onApprove: (id: string) => void;
@@ -17,6 +19,8 @@ type Props = {
 export function MessageList({
   messages,
   generated,
+  themName,
+  youName,
   onEditMessage,
   onDeleteMessage,
   onApprove,
@@ -47,6 +51,7 @@ export function MessageList({
         <MessageBubble
           key={msg.id}
           message={msg}
+          label={msg.role === "them" ? (themName || "Them") : (youName || "You")}
           onEdit={onEditMessage}
           onDelete={onDeleteMessage}
           onBlur={onMessageBlur}

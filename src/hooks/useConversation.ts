@@ -105,6 +105,14 @@ export function useConversation() {
     updateActive({ context });
   }
 
+  function setThemName(themName: string) {
+    updateActive({ themName });
+  }
+
+  function setYouName(youName: string) {
+    updateActive({ youName });
+  }
+
   function setAIConfig(aiConfig: AIConfig) {
     updateActive({ aiConfig });
   }
@@ -169,6 +177,8 @@ export function useConversation() {
     editMessage,
     deleteMessage,
     setContext,
+    setThemName,
+    setYouName,
     setAIConfig,
     autoTitle,
     startGenerating,

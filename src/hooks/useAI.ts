@@ -12,6 +12,8 @@ export function useAI(model: string) {
       messages: Message[];
       context: string;
       aiConfig: AIConfig;
+      themName?: string;
+      youName?: string;
       onChunk: (chunk: string) => void;
       onComplete: () => void;
       onError: () => void;
@@ -23,6 +25,8 @@ export function useAI(model: string) {
         messages: params.messages,
         context: params.context,
         aiConfig: params.aiConfig,
+        themName: params.themName,
+        youName: params.youName,
       });
 
       try {

@@ -5,12 +5,13 @@ import type { Message } from "@/types";
 
 type Props = {
   message: Message;
+  label: string;
   onEdit: (id: string, text: string) => void;
   onDelete: (id: string) => void;
   onBlur?: (message: Message) => void;
 };
 
-export function MessageBubble({ message, onEdit, onDelete, onBlur }: Props) {
+export function MessageBubble({ message, label, onEdit, onDelete, onBlur }: Props) {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(message.text);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -49,6 +50,9 @@ export function MessageBubble({ message, onEdit, onDelete, onBlur }: Props) {
   return (
     <div className={cn("flex mb-3 group", isThem ? "justify-start" : "justify-end")}>
       <div className={cn("max-w-[55%] min-w-[120px]", isThem ? "items-start" : "items-end")}>
+        <span className={cn("text-[10px] font-medium mb-0.5 px-1 block", isThem ? "text-zinc-400" : "text-indigo-400 text-right")}>
+          {label}
+        </span>
         <div
           className={cn(
             "relative rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
