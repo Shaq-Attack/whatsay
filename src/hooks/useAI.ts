@@ -35,8 +35,19 @@ export function useAI(model: string) {
           params.onChunk(chunk);
         }
         params.onComplete();
-      } catch {
-        setError("Could not reach Ollama. Is it still running?");
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : "";
+        if (msg.includes("system memory")) {
+          setError(`Not enough memory to run this model. ${msg}`);
+        } else if (msg.includes("not found")) {
+          setError(`Model not found. Is "${model}" still installed?`);
+        } else if (msg.includes("abort") || msg.includes("timeout")) {
+          setError("Request timed out. The model may be too slow or Ollama became unresponsive.");
+        } else if (msg && msg !== "Ollama request failed") {
+          setError(`Ollama error: ${msg}`);
+        } else {
+          setError("Could not reach Ollama. Is it still running?");
+        }
         params.onError();
       } finally {
         setIsLoading(false);

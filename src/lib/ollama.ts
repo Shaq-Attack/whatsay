@@ -53,12 +53,18 @@ export async function* generateStream(params: {
 
   if (!res.ok || !res.body) {
     clearTimeout(timeout);
-    throw new Error("Ollama request failed");
+    let detail = "Ollama request failed";
+    try {
+      const body: { error?: string } = await res.json();
+      if (body.error) detail = body.error;
+    } catch { /* no parseable body */ }
+    throw new Error(detail);
   }
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
+  let ollamaDone = false;
 
   try {
     while (true) {
@@ -72,17 +78,24 @@ export async function* generateStream(params: {
       for (const line of lines) {
         if (!line.trim()) continue;
         try {
-          const chunk: { message?: { content: string }; done: boolean } = JSON.parse(line);
+          const chunk: { message?: { content: string }; done: boolean; error?: string } = JSON.parse(line);
+          if (chunk.error) throw new Error(chunk.error);
           if (chunk.message?.content) yield chunk.message.content;
-          if (chunk.done) return;
-        } catch {
+          if (chunk.done) {
+            ollamaDone = true;
+            break;
+          }
+        } catch (e) {
+          if (e instanceof Error && e.message) throw e;
           // skip malformed line
         }
       }
+
+      if (ollamaDone) break;
     }
 
     // flush any remaining buffered content
-    if (buffer.trim()) {
+    if (buffer.trim() && !ollamaDone) {
       try {
         const chunk: { message?: { content: string }; done: boolean } = JSON.parse(buffer);
         if (chunk.message?.content) yield chunk.message.content;
@@ -92,6 +105,13 @@ export async function* generateStream(params: {
     }
   } finally {
     clearTimeout(timeout);
-    reader.cancel();
+    // Only abort the connection if the stream didn't finish cleanly.
+    // Calling reader.cancel() on a completed stream kills the TCP connection
+    // on Windows, which causes subsequent Ollama requests to fail.
+    if (!ollamaDone) {
+      reader.cancel().catch(() => {});
+    } else {
+      reader.releaseLock();
+    }
   }
 }

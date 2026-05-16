@@ -56,6 +56,7 @@ export default function App() {
           isLoading={ai.isLoading}
           error={ai.error}
           model={ollama.selectedModel}
+          availableModels={ollama.availableModels}
           onAddMessage={conv.addMessage}
           onEditMessage={conv.editMessage}
           onDeleteMessage={conv.deleteMessage}
@@ -66,6 +67,7 @@ export default function App() {
           onApprove={conv.approveGenerated}
           onReject={conv.rejectGenerated}
           onRegenerate={handleRegenerate}
+          onModelChange={ollama.setSelectedModel}
           onMessageBlur={(msg) => {
             if (msg.role === "them") conv.autoTitle(msg.text);
           }}

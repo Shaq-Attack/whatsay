@@ -13,6 +13,7 @@ type Props = {
   isLoading: boolean;
   error: string | null;
   model: string;
+  availableModels: string[];
   onAddMessage: (role: MessageRole) => void;
   onEditMessage: (id: string, text: string) => void;
   onDeleteMessage: (id: string) => void;
@@ -23,6 +24,7 @@ type Props = {
   onApprove: (id: string) => void;
   onReject: () => void;
   onRegenerate: () => void;
+  onModelChange: (model: string) => void;
   onMessageBlur?: (message: Message) => void;
 };
 
@@ -32,6 +34,7 @@ export function ConversationPage({
   isLoading,
   error,
   model,
+  availableModels,
   onAddMessage,
   onEditMessage,
   onDeleteMessage,
@@ -42,6 +45,7 @@ export function ConversationPage({
   onApprove,
   onReject,
   onRegenerate,
+  onModelChange,
   onMessageBlur,
 }: Props) {
   const [aiSetupOpen, setAiSetupOpen] = useState(false);
@@ -70,10 +74,12 @@ export function ConversationPage({
         <ContextInput value={conversation.context} onChange={onContextChange} />
         <GenerateBar
           model={model}
+          models={availableModels}
           loading={isLoading}
           disabled={conversation.messages.length === 0}
           error={error}
           onClick={onGenerate}
+          onModelChange={onModelChange}
         />
       </div>
 

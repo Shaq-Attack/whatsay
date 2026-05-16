@@ -1,20 +1,32 @@
-import { IconSparkles, IconAlertCircle } from "@tabler/icons-react";
+import { IconSparkles, IconAlertCircle, IconSelector } from "@tabler/icons-react";
 
 type Props = {
   model: string;
+  models: string[];
   loading: boolean;
   disabled: boolean;
   error: string | null;
   onClick: () => void;
+  onModelChange: (model: string) => void;
 };
 
-export function GenerateBar({ model, loading, disabled, error, onClick }: Props) {
+export function GenerateBar({ model, models, loading, disabled, error, onClick, onModelChange }: Props) {
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-zinc-400 truncate">
-          {model}
-        </span>
+        <div className="relative">
+          <select
+            value={model}
+            onChange={(e) => onModelChange(e.target.value)}
+            disabled={loading}
+            className="appearance-none text-xs text-zinc-400 hover:text-zinc-600 bg-transparent pr-5 py-1 cursor-pointer disabled:cursor-not-allowed focus:outline-none truncate max-w-[200px]"
+          >
+            {models.map((m) => (
+              <option key={m} value={m}>{m}</option>
+            ))}
+          </select>
+          <IconSelector className="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-400 pointer-events-none" />
+        </div>
         <button
           onClick={onClick}
           disabled={disabled || loading}
